@@ -25,11 +25,11 @@ export default function Navbar() {
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-cream/95 shadow-lg backdrop-blur-md' : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-3"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
+      <div className={`max-w-6xl mx-auto flex items-center justify-between h-16 px-6 md:px-10 rounded-full transition-all duration-500 backdrop-blur-xl ${
+        scrolled ? 'bg-cream/80 shadow-lg border border-warm/20' : 'bg-cream/50 border border-transparent'
+      }`}>
         {/* Logo */}
         <a href="#home" className="flex items-center gap-3 group">
           <span className="text-3xl group-hover:scale-110 transition-transform">🦊</span>
@@ -64,7 +64,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-cream border-t border-warm/30"
+            className="md:hidden bg-cream/95 backdrop-blur-xl mx-4 md:mx-8 mt-2 rounded-2xl border border-warm/20 shadow-lg"
           >
             <div className="px-6 py-6 flex flex-col gap-4">
               {navLinks.map((l) => (

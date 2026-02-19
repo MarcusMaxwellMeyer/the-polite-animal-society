@@ -2,15 +2,20 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+const base = import.meta.env.BASE_URL;
+
 const paintings = [
-  { id: 1, title: 'Sir Reginald Fox', sub: 'Watercolour · Cotton paper', emoji: '🦊', bg: 'bg-gradient-to-br from-orange-100 to-amber-50', price: '$85' },
-  { id: 2, title: 'Miss Beatrice Bunny', sub: 'Watercolour · Cotton paper', emoji: '🐰', bg: 'bg-gradient-to-br from-pink-50 to-rose-100', price: '$75' },
-  { id: 3, title: 'Professor Hoots', sub: 'Watercolour · Cotton paper', emoji: '🦉', bg: 'bg-gradient-to-br from-indigo-50 to-purple-50', price: '$90' },
-  { id: 4, title: 'Captain Barnaby Bear', sub: 'Watercolour · Cotton paper', emoji: '🐻', bg: 'bg-gradient-to-br from-amber-50 to-yellow-50', price: '$95' },
-  { id: 5, title: 'Lady Rosalind Deer', sub: 'Watercolour · Cotton paper', emoji: '🦌', bg: 'bg-gradient-to-br from-emerald-50 to-teal-50', price: '$80' },
-  { id: 6, title: 'Dr Whiskers', sub: 'Watercolour · Cotton paper', emoji: '🐱', bg: 'bg-gradient-to-br from-slate-50 to-blue-50', price: '$85' },
-  { id: 7, title: 'Mr Puddles the Otter', sub: 'Watercolour · Cotton paper', emoji: '🦦', bg: 'bg-gradient-to-br from-cyan-50 to-sky-50', price: '$70' },
-  { id: 8, title: 'Duchess Penelope Badger', sub: 'Watercolour · Cotton paper', emoji: '🦡', bg: 'bg-gradient-to-br from-stone-100 to-neutral-50', price: '$88' },
+  { id: 1, title: 'Sir Reginald Fox', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-1.jpeg`, price: '$85' },
+  { id: 2, title: 'Miss Beatrice Bunny', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-2.jpeg`, price: '$75' },
+  { id: 3, title: 'Professor Hoots', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-3.jpeg`, price: '$90' },
+  { id: 4, title: 'Captain Barnaby Bear', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-4.jpeg`, price: '$95' },
+  { id: 5, title: 'Lady Rosalind Deer', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-5.jpeg`, price: '$80' },
+  { id: 6, title: 'Dr Whiskers', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-6.jpeg`, price: '$85' },
+  { id: 7, title: 'Mr Puddles the Otter', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-7.jpeg`, price: '$70' },
+  { id: 8, title: 'Duchess Penelope Badger', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-8.jpeg`, price: '$88' },
+  { id: 9, title: 'Morning Light Study', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-9.jpeg`, price: '$82' },
+  { id: 10, title: 'Woodland Reverie', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-10.jpeg`, price: '$78' },
+  { id: 11, title: 'Countryside Charm', sub: 'Watercolour · Cotton paper', image: `${base}artwork/painting-11.jpeg`, price: '$92' },
 ];
 
 export default function Gallery() {
@@ -39,6 +44,10 @@ export default function Gallery() {
 
       {/* Scroll controls + rail */}
       <div className="relative max-w-[90rem] mx-auto">
+        {/* Left/right fade masks */}
+        <div className="hidden md:block absolute left-0 top-0 bottom-0 w-20 z-[5] pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(250,240,230,0.95), transparent)' }} />
+        <div className="hidden md:block absolute right-0 top-0 bottom-0 w-20 z-[5] pointer-events-none" style={{ background: 'linear-gradient(to left, rgba(250,240,230,0.95), transparent)' }} />
+
         <button onClick={() => scroll('left')}
           className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-12 h-12 bg-white/90 shadow-lg rounded-full text-bark hover:text-forest hover:scale-105 transition-all">
           <ChevronLeft size={22} />
@@ -56,8 +65,13 @@ export default function Gallery() {
               className="flex-none w-72 md:w-80 snap-center"
             >
               <div className="bg-white/80 border border-warm/25 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group cursor-pointer">
-                <div className={`${p.bg} aspect-[3/4] flex items-center justify-center relative`}>
-                  <span className="text-8xl group-hover:scale-110 transition-transform duration-500">{p.emoji}</span>
+                <div className="aspect-[3/4] relative overflow-hidden bg-linen">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
                   <div className="absolute inset-0 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="bg-white/90 backdrop-blur-sm text-bark font-body text-sm px-4 py-2 rounded-full shadow">View Details</span>
                   </div>

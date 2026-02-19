@@ -1,54 +1,124 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, RotateCcw, ArrowRight } from 'lucide-react';
 
-const questions = [
+const QUIZ_LENGTH = 5;
+
+const allQuestions = [
   {
     q: "It's a rainy Sunday afternoon. What are you up to?",
     opts: [
-      { text: '🍰 Baking something delightful', s: { fox: 2, rabbit: 1, owl: 0, bear: 1, deer: 0 } },
-      { text: '📚 Curled up with a good book', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 1 } },
-      { text: '🎨 Painting or crafting', s: { fox: 1, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
-      { text: '💤 Napping by the fireplace', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+      { text: 'Baking something delightful', s: { fox: 2, rabbit: 1, owl: 0, bear: 1, deer: 0 } },
+      { text: 'Curled up with a good book', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 1 } },
+      { text: 'Painting or crafting', s: { fox: 1, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Napping by the fireplace', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
     ],
   },
   {
     q: 'You find a lost letter on a forest path. What do you do?',
     opts: [
-      { text: '🔍 Investigate who it belongs to', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
-      { text: '📮 Take it to the nearest post box', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
-      { text: '📖 Read it (just a tiny peek)', s: { fox: 1, rabbit: 0, owl: 2, bear: 0, deer: 0 } },
-      { text: '🏠 Bring it home and think about it', s: { fox: 0, rabbit: 0, owl: 1, bear: 2, deer: 1 } },
+      { text: 'Investigate who it belongs to', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
+      { text: 'Take it to the nearest post box', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Read it — just a tiny peek', s: { fox: 1, rabbit: 0, owl: 2, bear: 0, deer: 0 } },
+      { text: 'Bring it home and think about it', s: { fox: 0, rabbit: 0, owl: 1, bear: 2, deer: 1 } },
     ],
   },
   {
     q: "What's your ideal outfit?",
     opts: [
-      { text: '🧣 A cozy scarf and waistcoat', s: { fox: 2, rabbit: 1, owl: 0, bear: 0, deer: 0 } },
-      { text: '👗 A pretty pinafore or dress', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
-      { text: '🎩 A distinguished hat and spectacles', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
-      { text: '🧥 An oversized warm cardigan', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+      { text: 'A cozy scarf and waistcoat', s: { fox: 2, rabbit: 1, owl: 0, bear: 0, deer: 0 } },
+      { text: 'A pretty pinafore or dress', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'A distinguished hat and spectacles', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
+      { text: 'An oversized warm cardigan', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
     ],
   },
   {
     q: 'Pick your favourite tea-time treat:',
     opts: [
-      { text: '🫐 Berry scones with clotted cream', s: { fox: 1, rabbit: 2, owl: 0, bear: 1, deer: 0 } },
-      { text: '🍯 Honey cake with lavender', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
-      { text: '🍊 Marmalade on thick toast', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
-      { text: '🌿 Chamomile tea and biscuits', s: { fox: 0, rabbit: 1, owl: 1, bear: 0, deer: 2 } },
+      { text: 'Berry scones with clotted cream', s: { fox: 1, rabbit: 2, owl: 0, bear: 1, deer: 0 } },
+      { text: 'Honey cake with lavender', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+      { text: 'Marmalade on thick toast', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
+      { text: 'Chamomile tea and biscuits', s: { fox: 0, rabbit: 1, owl: 1, bear: 0, deer: 2 } },
     ],
   },
   {
     q: 'How do your friends describe you?',
     opts: [
-      { text: '✨ Clever and charming', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
-      { text: '💛 Kind and thoughtful', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
-      { text: '🦉 Wise and calm', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
-      { text: '🌸 Gentle and dreamy', s: { fox: 0, rabbit: 1, owl: 0, bear: 0, deer: 2 } },
+      { text: 'Clever and charming', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
+      { text: 'Kind and thoughtful', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Wise and calm', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
+      { text: 'Gentle and dreamy', s: { fox: 0, rabbit: 1, owl: 0, bear: 0, deer: 2 } },
+    ],
+  },
+  {
+    q: 'Your ideal holiday cottage would be near…',
+    opts: [
+      { text: 'A quaint village with cobbled streets', s: { fox: 2, rabbit: 1, owl: 0, bear: 0, deer: 0 } },
+      { text: 'A wildflower meadow with a stream', s: { fox: 0, rabbit: 1, owl: 0, bear: 0, deer: 2 } },
+      { text: 'An ancient library or observatory', s: { fox: 0, rabbit: 0, owl: 2, bear: 0, deer: 1 } },
+      { text: 'Deep in the woods, far from everyone', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+    ],
+  },
+  {
+    q: 'Which season speaks to your soul?',
+    opts: [
+      { text: 'Autumn — golden leaves and wool scarves', s: { fox: 2, rabbit: 0, owl: 1, bear: 1, deer: 0 } },
+      { text: 'Spring — blossoms and fresh beginnings', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Winter — quiet nights and candlelight', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
+      { text: 'Summer — long walks and warm breezes', s: { fox: 1, rabbit: 0, owl: 0, bear: 0, deer: 2 } },
+    ],
+  },
+  {
+    q: 'You\'ve been given a small shop. What do you sell?',
+    opts: [
+      { text: 'Antiques and curiosities', s: { fox: 2, rabbit: 0, owl: 1, bear: 0, deer: 0 } },
+      { text: 'Fresh flowers and handmade soaps', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Rare books and maps', s: { fox: 0, rabbit: 0, owl: 2, bear: 0, deer: 1 } },
+      { text: 'Homemade jams and baked goods', s: { fox: 0, rabbit: 1, owl: 0, bear: 2, deer: 0 } },
+    ],
+  },
+  {
+    q: 'What would you bring to a woodland picnic?',
+    opts: [
+      { text: 'A wicker hamper with fine cheeses', s: { fox: 2, rabbit: 0, owl: 0, bear: 1, deer: 0 } },
+      { text: 'Freshly picked berries and lemonade', s: { fox: 0, rabbit: 1, owl: 0, bear: 0, deer: 2 } },
+      { text: 'A journal and binoculars', s: { fox: 0, rabbit: 0, owl: 2, bear: 0, deer: 1 } },
+      { text: 'An enormous blanket and cushions', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+    ],
+  },
+  {
+    q: 'A stranger asks for directions. You…',
+    opts: [
+      { text: 'Walk them there yourself, making conversation', s: { fox: 2, rabbit: 1, owl: 0, bear: 0, deer: 0 } },
+      { text: 'Draw a little map on a scrap of paper', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Give precise, detailed instructions', s: { fox: 0, rabbit: 0, owl: 2, bear: 1, deer: 0 } },
+      { text: 'Point them the right way with a warm smile', s: { fox: 0, rabbit: 0, owl: 0, bear: 1, deer: 2 } },
+    ],
+  },
+  {
+    q: 'Pick a way to spend an evening:',
+    opts: [
+      { text: 'Hosting a dinner party for friends', s: { fox: 2, rabbit: 1, owl: 0, bear: 1, deer: 0 } },
+      { text: 'Tending to your garden by twilight', s: { fox: 0, rabbit: 1, owl: 0, bear: 0, deer: 2 } },
+      { text: 'Stargazing with a telescope', s: { fox: 0, rabbit: 0, owl: 2, bear: 0, deer: 1 } },
+      { text: 'Sitting by a crackling fire with cocoa', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
+    ],
+  },
+  {
+    q: 'You receive an unexpected parcel. Inside you hope to find…',
+    opts: [
+      { text: 'A beautifully tailored garment', s: { fox: 2, rabbit: 0, owl: 0, bear: 0, deer: 1 } },
+      { text: 'Seeds for rare cottage flowers', s: { fox: 0, rabbit: 2, owl: 0, bear: 0, deer: 1 } },
+      { text: 'A first-edition novel', s: { fox: 1, rabbit: 0, owl: 2, bear: 0, deer: 0 } },
+      { text: 'A tin of homemade shortbread', s: { fox: 0, rabbit: 0, owl: 0, bear: 2, deer: 1 } },
     ],
   },
 ];
+
+function shuffleAndPick(arr, n) {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
 
 const results = {
   fox:    { emoji: '🦊', name: 'The Dapper Fox', desc: "Clever, charming, and always impeccably dressed. You'd be found in a cozy study wearing a velvet waistcoat, sipping Earl Grey.", bg: 'bg-orange-50' },
@@ -64,6 +134,10 @@ export default function AnimalQuiz() {
   const [scores, setScores] = useState({ fox: 0, rabbit: 0, owl: 0, bear: 0, deer: 0 });
   const [result, setResult] = useState(null);
   const [picked, setPicked] = useState(null);
+  const [seed, setSeed] = useState(0);
+
+  // Pick a random set of questions each time the quiz starts
+  const questions = useMemo(() => shuffleAndPick(allQuestions, QUIZ_LENGTH), [seed]);
 
   const answer = (opt) => {
     setPicked(opt);
@@ -81,7 +155,7 @@ export default function AnimalQuiz() {
     }, 350);
   };
 
-  const restart = () => { setStarted(false); setQi(0); setScores({ fox: 0, rabbit: 0, owl: 0, bear: 0, deer: 0 }); setResult(null); setPicked(null); };
+  const restart = () => { setStarted(false); setQi(0); setScores({ fox: 0, rabbit: 0, owl: 0, bear: 0, deer: 0 }); setResult(null); setPicked(null); setSeed(s => s + 1); };
 
   const progress = ((qi + (result ? 1 : 0)) / questions.length) * 100;
 
