@@ -11,23 +11,23 @@ export default function Footer() {
     <footer className="bg-bark text-cream/80">
       {/* Newsletter */}
       <div className="bg-forest">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-10 sm:py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
               <h3 className="font-serif text-xl font-bold text-cream mb-1">Join The Society 🦊</h3>
               <p className="font-body text-cream/50 text-sm">Get early access to new collections, behind-the-scenes peeks, and the occasional fox joke.</p>
             </div>
-            <div className="flex w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row w-full md:w-auto gap-0">
               <input type="email" placeholder="your@email.com"
-                className="bg-white/10 border border-cream/20 rounded-l-full px-5 py-3 font-body text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-cream/40 w-full md:w-64 transition-all" />
-              <button className="bg-cream text-forest font-body font-semibold text-sm px-6 py-3 rounded-r-full hover:bg-honey hover:text-bark transition-colors whitespace-nowrap">Subscribe</button>
+                className="bg-white/10 border border-cream/20 rounded-full sm:rounded-l-full sm:rounded-r-none px-5 py-3 font-body text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-cream/40 w-full md:w-64 transition-all" />
+              <button className="bg-cream text-forest font-body font-semibold text-sm px-6 py-3 rounded-full sm:rounded-r-full sm:rounded-l-none hover:bg-honey hover:text-bark transition-colors whitespace-nowrap mt-3 sm:mt-0">Subscribe</button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main footer */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-14 sm:py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">

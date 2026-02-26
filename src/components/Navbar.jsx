@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
   { name: 'Gallery', href: '#gallery' },
-  { name: 'Shop', href: '#shop' },
   { name: 'About', href: '#about' },
   { name: 'Contact', href: '#contact' },
 ];
@@ -13,6 +13,8 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isShopPage = location.pathname === '/shop';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -25,30 +27,36 @@ export default function Navbar() {
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 pt-3"
+      className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-5 md:px-8 lg:px-10 pt-2.5 sm:pt-3"
     >
-      <div className={`max-w-6xl mx-auto flex items-center justify-between h-16 px-6 md:px-10 rounded-full transition-all duration-500 backdrop-blur-xl ${
-        scrolled ? 'bg-cream/80 shadow-lg border border-warm/20' : 'bg-cream/50 border border-transparent'
+      <div className={`max-w-5xl mx-auto flex items-center justify-between h-13 sm:h-14 md:h-[3.6rem] px-4 sm:px-6 md:px-8 rounded-full transition-all duration-500 backdrop-blur-2xl backdrop-saturate-150 border ${
+        scrolled
+          ? 'bg-white/90 shadow-lg shadow-bark/5 border-bark/10'
+          : 'bg-white/75 shadow-md shadow-bark/4 border-white/50'
       }`}>
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-3 group">
-          <span className="text-3xl group-hover:scale-110 transition-transform">🦊</span>
+        <a href="#home" className="flex items-center gap-2.5 group">
+          <span className="text-2xl sm:text-3xl group-hover:scale-110 transition-transform">🦊</span>
           <div>
-            <span className="font-serif text-lg font-bold text-bark block leading-tight">The Polite Animal</span>
-            <span className="font-hand text-sm text-moss -mt-0.5 block">Society</span>
+            <span className="font-serif text-base sm:text-lg font-bold text-bark block leading-tight">The Polite Animal</span>
+            <span className="font-hand text-xs sm:text-sm text-moss -mt-0.5 block">Society</span>
           </div>
         </a>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((l) => (
-            <a key={l.name} href={l.href} className="font-body text-sm text-bark/70 hover:text-forest transition-colors">
-              {l.name}
-            </a>
-          ))}
-          <a href="#shop" className="inline-flex items-center gap-2 bg-forest text-cream px-5 py-2.5 rounded-full font-body text-sm font-semibold hover:bg-bark transition-colors shadow-md">
+        <div className="hidden md:flex items-center gap-7">
+          {isShopPage ? (
+            <Link to="/" className="font-body text-sm font-medium text-bark/80 hover:text-forest transition-colors">Home</Link>
+          ) : (
+            navLinks.map((l) => (
+              <a key={l.name} href={l.href} className="font-body text-sm font-medium text-bark/80 hover:text-forest transition-colors">
+                {l.name}
+              </a>
+            ))
+          )}
+          <Link to="/shop" className="inline-flex items-center gap-2 bg-forest text-white px-5 py-2 rounded-full font-body text-sm font-semibold hover:bg-bark transition-colors shadow-md">
             <ShoppingBag size={15} /> Shop
-          </a>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -64,17 +72,21 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-cream/95 backdrop-blur-xl mx-4 md:mx-8 mt-2 rounded-2xl border border-warm/20 shadow-lg"
+            className="md:hidden bg-white/95 backdrop-blur-2xl backdrop-saturate-150 mx-2 sm:mx-4 mt-2 rounded-2xl border border-bark/10 shadow-xl shadow-bark/8"
           >
-            <div className="px-6 py-6 flex flex-col gap-4">
-              {navLinks.map((l) => (
-                <a key={l.name} href={l.href} onClick={() => setOpen(false)} className="font-body text-bark text-lg hover:text-forest transition-colors">
-                  {l.name}
-                </a>
-              ))}
-              <a href="#shop" onClick={() => setOpen(false)} className="inline-flex items-center justify-center gap-2 bg-forest text-cream px-5 py-3 rounded-full font-body font-semibold hover:bg-bark transition-colors mt-2">
+            <div className="px-6 py-5 flex flex-col gap-3.5">
+              {isShopPage ? (
+                <Link to="/" onClick={() => setOpen(false)} className="font-body font-medium text-bark text-base hover:text-forest transition-colors">Home</Link>
+              ) : (
+                navLinks.map((l) => (
+                  <a key={l.name} href={l.href} onClick={() => setOpen(false)} className="font-body font-medium text-bark text-base hover:text-forest transition-colors">
+                    {l.name}
+                  </a>
+                ))
+              )}
+              <Link to="/shop" onClick={() => setOpen(false)} className="inline-flex items-center justify-center gap-2 bg-forest text-white px-5 py-3 rounded-full font-body font-semibold hover:bg-bark transition-colors mt-1 shadow-md">
                 <ShoppingBag size={16} /> Shop Now
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}

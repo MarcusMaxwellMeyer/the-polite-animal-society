@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #FFF8F0;
-  --color-linen: #FAF0E6;
-  --color-parchment: #F5E6D3;
-  --color-warm: #E8D5C4;
-  --color-clay: #C4A882;
-  --color-bark: #8B6F47;
-  --color-forest: #5C6B4F;
-  --color-moss: #7A8B6F;
-  --color-sage: #A3B18A;
+  --color-cream: #FFFFFF;
+  --color-linen: #F7F6F3;
+  --color-parchment: #EFEEE9;
+  --color-warm: #E0DED6;
+  --color-clay: #B8B3A6;
+  --color-bark: #5C4A32;
+  --color-forest: #2C5F5D;
+  --color-moss: #4A7B78;
+  --color-sage: #7BA39E;
   --color-berry: #9B4F5C;
   --color-plum: #6B3A5C;
-  --color-honey: #D4A843;
+  --color-honey: #C9A84C;
 
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-body: 'Lora', Georgia, serif;
@@ -32,14 +32,14 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-cream);
-  color: #5C4033;
+  background-color: var(--color-linen);
+  color: #3D3528;
   overflow-x: hidden;
 }
 
 ::selection {
-  background-color: var(--color-warm);
-  color: #5C4033;
+  background-color: var(--color-sage);
+  color: #fff;
 }
 
 h1, h2, h3, h4, h5, h6 {

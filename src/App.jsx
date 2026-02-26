@@ -1,42 +1,57 @@
+import { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import './index.css';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Gallery from './components/Gallery';
-import ShopCategories from './components/ShopCategories';
-import About from './components/About';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import Shop from './pages/Shop';
+import ProductPage from './pages/ProductPage';
 
 function App() {
   const bgUrl = `${import.meta.env.BASE_URL}bg-meadow.png`;
+  const [scrollFade, setScrollFade] = useState(0);
+  const location = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      // Fade from 0 (top) to 1 (fully covered) over the first 1200px of scroll
+      const t = Math.min(window.scrollY / 1200, 1);
+      setScrollFade(t);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Background opacity: 1.0 at top → 0 as you scroll down
+  const bgOpacity = 1 - scrollFade;
 
   return (
     <>
-      {/* Faded background image */}
+      {/* Faded background image — more visible at top, fades as you scroll */}
       <div
         className="fixed inset-0 -z-10 pointer-events-none"
         style={{
           backgroundImage: `url('${bgUrl}')`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          opacity: 0.05,
-        }}
-      />
-      <div
-        className="fixed inset-0 -z-10 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to bottom, #FFF8F0 0%, transparent 15%, transparent 85%, #FFF8F0 100%)',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center calc(50% + 80px)',
+          opacity: bgOpacity,
+          transition: 'opacity 0.15s ease-out',
         }}
       />
 
       <Navbar />
       <main>
-        <Hero />
-        <Gallery />
-        <ShopCategories />
-        <About />
-        <Contact />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+        </Routes>
       </main>
       <Footer />
     </>
