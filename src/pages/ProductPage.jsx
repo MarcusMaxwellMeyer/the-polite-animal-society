@@ -36,7 +36,7 @@ export default function ProductPage() {
   }
 
   return (
-    <section className="min-h-screen pt-24 sm:pt-28 pb-20">
+    <section className="min-h-screen pt-24 sm:pt-28 pb-20 bg-white/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         {/* Breadcrumb */}
         <motion.div

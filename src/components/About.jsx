@@ -13,7 +13,7 @@ export default function About() {
   const inView = useInView(sec, { once: true, margin: '-80px' });
 
   return (
-    <section id="about" ref={sec} className="py-16 sm:py-24 md:py-32 bg-white/60 relative overflow-hidden">
+    <section id="about" ref={sec} className="py-16 sm:py-24 md:py-32 bg-white/80 relative overflow-hidden">
       <div className="absolute top-8 right-8 text-[8rem] leading-none opacity-[0.04] pointer-events-none select-none">🌸</div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">

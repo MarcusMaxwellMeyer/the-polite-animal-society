@@ -40,10 +40,12 @@ function App() {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center calc(50% + 80px)',
-          opacity: bgOpacity,
+          opacity: bgOpacity * 0.45,
           transition: 'opacity 0.15s ease-out',
         }}
       />
+      {/* Light overlay so text stays readable */}
+      <div className="fixed inset-0 -z-10 pointer-events-none bg-linen/80" />
 
       <Navbar />
       <main>
